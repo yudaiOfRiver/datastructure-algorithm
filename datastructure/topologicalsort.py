@@ -1,39 +1,47 @@
+import io
+import sys
+_INPUT = """\
+6 6
+0 1
+1 2
+3 1
+3 4
+4 5
+5 2
+"""
+sys.stdin = io.StringIO(_INPUT)
+#--------------------------------------#
+
 from collections import deque, defaultdict
 
-
-def topologicalsort(A): # A : 出を1, 入を-1で表現した隣接行列
+def topological_sort(A, in_deg):
+    # A[i] : 頂点i からの到達可能集合
+    # in_deg[i] : 頂点i の入次数
     V = len(A)
-    deg = defaultdict(lambda: 0) # deg[v] : 頂点 v に到達できる頂点数
-    G = defaultdict(list)        # G[v]   : 頂点v から到達できる頂点集合
 
-    for i in range(V):
-        for j in range(V):
-            if i != j and A[i][j] == -1:
-                deg[i] += 1
-            if i != j and A[i][j] == 1:
-                G[i].append(j)
+    topo_sort = [v for v in range(V) if in_deg[v] == 0]
+    q = deque(topo_sort)
 
+    while q:
+        v = q.popleft()
+        for next in A[v]:
+            in_deg[next] -= 1
+            if in_deg[next] == 0:
+                q.append(next)
+                topo_sort.append(next)
 
-    ans = list(v for v in range(V) if deg[v]==0)
-    deq = deque(ans)
-    used = [0]*V
-
-    while deq:
-        v = deq.popleft()
-        for t in G[v]:
-            deg[t] -= 1
-            if deg[t]==0:
-                deq.append(t)
-                ans.append(t)
-
-    return ans
-
-A = [[1, -1, 0, 1], [1, 1, 1, 0], [0, -1, 1, 1], [-1, 0, -1, 1]]
-
-print(topologicalsort(A))
+    return topo_sort
 
 
-
+if __name__ == '__main__':
+    V, E = map(int, input().split())
+    A = defaultdict(list)
+    in_deg = defaultdict(lambda : 0)
+    for i in range(E):
+        si, ti = map(int, input().split())
+        A[si].append(ti)
+        in_deg[ti] += 1
+    print(topological_sort(A, in_deg))
 
 
 
