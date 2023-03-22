@@ -15,7 +15,7 @@ sys.stdin = io.StringIO(_INPUT)
 from collections import deque, defaultdict
 
 def topological_sort(A, in_deg):
-    # A[i] : 頂点i からの到達可能集合
+    # A[i] : 頂点i からの到達可能集合. ある頂点からの到達可能集合がなくても、すべての頂点をキーに持つ必要がある.
     # in_deg[i] : 頂点i の入次数
     V = len(A)
 

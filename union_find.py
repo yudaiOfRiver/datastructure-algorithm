@@ -1,33 +1,31 @@
 from collections import defaultdict
 
 class UnionFind():
-
-    def __init__(self, n):
+    def __init__(self, n) -> None:
+        ## if 正 : そのノードの根
+        ## if 負 : 根であり、絶対値は要素数を表す
         self.n = n
-        self.root = [-1]*(n+1)
-        self.rank = [0]*(n+1)
+        self.root = [-1] * n
 
     def find(self, x):
-        if(self.root[x] < 0):
+        if self.root[x] < 0:
             return x
         else:
             self.root[x] = self.find(self.root[x])
             return self.root[x]
 
-    def unite(self, x, y):
+    def union(self, x, y):
         x = self.find(x)
         y = self.find(y)
 
-        if(x == y):
+        if x == y:
             return
-        elif(self.rank[x] > self.rank[y]):
-            self.root[x] += self.root[y]
-            self.root[y] = x
-        else:
-            self.root[y] += self.root[x]
-            self.root[x] = y
-            if(self.rank[x] == self.rank[y]):
-                self.rank[y] += 1
+
+        if self.root[x] > self.root[y]:
+            x, y = y, x
+
+        self.root[x] += self.root[y]
+        self.root[y] = x
 
     def same(self, x, y):
         return self.find(x) == self.find(y)
@@ -47,21 +45,12 @@ class UnionFind():
             group_members[self.find(member)].append(member)
         return group_members
 
-
 if __name__ == '__main__':
-    n = 9
-    uf = UnionFind(n)
-    uf.unite(1, 2)
-    uf.unite(2, 5)
-    uf.unite(5, 9)
-    uf.unite(3, 6)
-    uf.unite(4, 7)
-    uf.unite(7, 8)
+    ufb = UnionFind(5)
+    ufb.union(3, 4)
+    ufb.union(2, 3)
+    ufb.union(0, 1)
 
-    print(uf.find(1))
-    print(uf.find(4))
 
-    print(uf.same(1, 2))
-    print(uf.same(1, 3))
-    print(uf.root)
-    print(uf.rank)
+
+
