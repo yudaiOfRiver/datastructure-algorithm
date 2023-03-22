@@ -1,37 +1,35 @@
-def mergesort(nums):
-
-    def merge(left, right):
-        lp, rp = 0, 0
-        merged = []
-        while lp < len(left) and rp < len(right):
-            if left[lp] <= right[rp]:
-                merged.append(left[lp])
-                lp += 1
-            else:
-                merged.append(right[rp])
-                rp += 1
-
-        if lp < len(left):
-            merged.extend(left[lp:])
-        elif rp < len(right):
-            merged.extend(right[rp])
-        return merged
-
-
-    if len(nums) == 1:
+def merge_sort(nums):
+    if len(nums) <= 1:
         return nums
 
-    m = len(nums) // 2
-    left, right = nums[:m], nums[m:]
-    left = mergesort(left)
-    right = mergesort(right)
+    mid   = len(nums) // 2
+    left  = nums[:mid]
+    right = nums[mid:]
 
+    left  = merge_sort(left)
+    right = merge_sort(right)
     return merge(left, right)
 
+def merge(left, right):
+    i = j = 0
+    merged = []
+    # 2つの配列を比較しながらマージする
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            merged.append(right[j])
+            j += 1
+
+    # 残った要素を追加する
+    merged += left[i:]
+    merged += right[j:]
+    return merged
 
 
-nums = [2, 6, 3, 7, -1, 4, 0]
-print(mergesort(nums))
+nums = [100, -29, 0, 7, -1, 4, 0, 23, -29]
+print(merge_sort(nums))
 
 
 

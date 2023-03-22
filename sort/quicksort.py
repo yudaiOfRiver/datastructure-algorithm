@@ -1,26 +1,22 @@
-import random
+import numpy as np
 
-def quicksort(nums):
-    if len(nums) == 0:
+def quick_sort(nums):
+    if len(nums) <= 1:
         return nums
 
-    base = random.choice(nums)
-    base_count = 0
-    left, right = [], []
+    pivot = np.random.choice(nums)
+    pivot_count = 0
 
+    left = []; right = []
     for num in nums:
-        if num < base:
-            left.append(num)
-        elif num > base:
-            right.append(num)
-        else:
-            base_count += 1
+        if num < pivot: left.append(num)
+        if num > pivot: right.append(num)
+        if num == pivot: pivot_count += 1
 
-    left = quicksort(left)
-    right = quicksort(right)
-    return left + [base] * base_count + right
+    return quick_sort(left) + [pivot] * pivot_count + quick_sort(right)
+
 
 nums = [2, 2, 1, 6, 1, 7, 3]
-print(quicksort(nums))
+print(quick_sort(nums))
 
 
